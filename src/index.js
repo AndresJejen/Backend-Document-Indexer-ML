@@ -71,7 +71,8 @@ app.use('/graphql',graphQLHttp({
                 wlanguage: args.docInput.wlanguage,
                 ilevel: args.docInput.ilevel,
                 flevel: args.docInput.flevel,
-                date: args.docInput.date
+                date: args.docInput.date,
+                link: args.docInput.link
             };
             Docs.push(Doc);
             return Doc;
