@@ -10,16 +10,45 @@ const app = express();
 // MiddleWares
 app.use(bodyparser.json());
 
-//rutas
+//Variable documentos
+const Docs = [];
 
+
+//rutas
 app.use('/graphql',graphQLHttp({
     schema: buildSchema(`
+         
+        type Doc{
+            _id : ID!
+            name: String!
+            author: String!
+            mlanguage: String!
+            typedoc: String!
+            wlanguage: String!
+            ilevel: String!
+            flevel: String!
+            date: String!
+            link: String!
+        }
+
+        input InputDoc{
+            name: String!
+            author: String!
+            mlanguage: String!
+            typedoc: String!
+            wlanguage: String!
+            ilevel: String!
+            flevel: String!
+            date: String!
+            link: String!
+        }
+
         type RootQuery{
-            events: [String!]!
+            docs: [Doc!]!
         }
 
         type RootMutation{
-            createEvent(name: String) : String
+            createDoc(docInput: InputDoc) : Doc
         }
 
         schema {
@@ -28,12 +57,24 @@ app.use('/graphql',graphQLHttp({
         }
     `),
     rootValue: {
-        events: ()=>{
-            return ['Evento 1','Evento 2','Evento 3'];
+        docs: ()=>{
+            // console.log(Docs);
+            return Docs;
         },
-        createEvent: (args) =>{
-            const eventName = args.name;
-            return eventName;
+        createDoc: (args) =>{
+            const Doc = {
+                _id : Math.random().toString(),
+                name: args.docInput.name,
+                author: args.docInput.author,
+                mlanguage: args.docInput.mlanguage,
+                typedoc: args.docInput.typedoc,
+                wlanguage: args.docInput.wlanguage,
+                ilevel: args.docInput.ilevel,
+                flevel: args.docInput.flevel,
+                date: args.docInput.date
+            };
+            Docs.push(Doc);
+            return Doc;
         }
     },
     graphiql: true
