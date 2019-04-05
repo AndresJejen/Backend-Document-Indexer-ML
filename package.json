@@ -1,0 +1,22 @@
+{
+  "name": "nodemongographql",
+  "version": "1.0.0",
+  "description": "Ejemplo Online de Uso de GraphQL",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/",
+    "dev": "nodemon src/",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "AndresJejen",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "express-graphql": "^0.7.1",
+    "graphql": "^14.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.10"
+  }
+}
