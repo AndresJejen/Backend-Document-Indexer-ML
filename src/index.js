@@ -12,8 +12,12 @@ const app = express();
 // MiddleWares
 app.use(bodyparser.json());
 
+//importaciones temporales
+const bcrypt = require('bcryptjs');
+
 //Temporal Modelo
 const Doc = require('./models/docs');
+const User = require('./models/user');
 
 
 //rutas
@@ -34,6 +38,14 @@ app.use('/graphql',graphQLHttp({
             link: String!
         }
 
+        type User{
+            _id : ID!
+            name : String!
+            email : String!
+            password: String
+            level: String!
+        }
+
         input InputDoc{
             name: String!
             titulo : String!
@@ -47,12 +59,20 @@ app.use('/graphql',graphQLHttp({
             link: String!
         }
 
+        input InputUser{
+            name : String!
+            email : String!
+            password: String!
+            level: String!
+        }
+
         type RootQuery{
             docs: [Doc!]!
         }
 
         type RootMutation{
             createDoc(docInput: InputDoc) : Doc
+            createUser(userInput: InputUser) : User
         }
 
         schema {
@@ -86,18 +106,65 @@ app.use('/graphql',graphQLHttp({
                 ilevel: args.docInput.ilevel,
                 flevel: args.docInput.flevel,
                 date: new Date(),
-                link: args.docInput.link
+                link: args.docInput.link,
+                helper : '5ca988df6c4db63fc8b90855'
             });
+            let createddoc;
             return doc
                 .save()
                 .then( result => {
-                    //console.log(result);
-                    return {...result._doc, _id: doc.id};
+                    createddoc =  {...result._doc, _id: result._doc._id.toString()};
+                    return User.findById('5ca988df6c4db63fc8b90855');
+                })
+                .then(user => {
+                    if (!user){
+                        throw new Error('Usuario inexistente.');
+                    }
+                    user.documentsadded.push(doc);
+                    return user.save();
+                })
+                .then(result => {
+                    return createddoc;
                 })
                 .catch(err => {
-                    console.error(`Error en guarda un dato ${err}`)
+                    console.error(`Error en guarda un nuevo documento ${err}`)
                     throw err;
                 });
+        },
+        createUser: (args) =>{
+
+            return User.findOne({email: args.userInput.email })
+                .then(user => {
+                    if (user){
+                        throw new Error('Esta Email ya está registrado.');
+                    }
+                    return bcrypt.hash(args.userInput.password,12);
+                })
+                .then( hashedPassword => {
+                    const user = new User({
+                        name: args.userInput.name,
+                        email: args.userInput.email,
+                        password: hashedPassword,
+                        level: args.userInput.level
+                    });
+
+                    return user
+                        .save()
+                        .then( result => {
+                            //console.log(result);
+                            return {...result._doc,password: null, _id: result.id};
+                        })
+                        .catch(err => {
+                            console.error(`Error en guardar un nuevo usuario ${err}`)
+                            throw err;
+                        });
+                })
+                .catch(
+                    err => {
+                        console.error("Error al crear Hash de password",err);
+                        throw err;
+                    }
+                );
         }
     },
     graphiql: true

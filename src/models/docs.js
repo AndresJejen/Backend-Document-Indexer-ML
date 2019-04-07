@@ -13,7 +13,11 @@ const DocsSchema = Schema({
     ilevel : {type:String,required: false},
     flevel : {type:String,required: false},
     date : {type:Date, default:Date.now},
-    link : {type:String,unique:true,required: false}
+    link : {type:String,unique:true,required: false},
+    helper: {
+        type : Schema.Types.ObjectId,
+        ref: 'user'
+    }
 });
 
 module.exports = mongoose.model('docs',DocsSchema);
