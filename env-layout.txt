@@ -1,0 +1,7 @@
+    PORT = 
+    MONGODB_SERVER = 
+    MONGODB_HEAD = 
+    MONGODB_DB = 
+    MONGODB_PORT = 
+    MONGODB_USER = 
+    MONGODB_PASSWORD = 
