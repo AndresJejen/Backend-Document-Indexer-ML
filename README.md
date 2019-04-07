@@ -22,7 +22,7 @@ There is just a .env layout without connection data.
 
 Just stay sure that you have created the Mongo Database in your local machine or this repository does not work.
 
-# Colaborator
+# Collaborators
 
 1. German Andres Jejen Cortes [GitHub AndresJejen](https://github.com/AndresJejen)
 -- here you can write your name.
