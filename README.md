@@ -11,7 +11,7 @@ If you wanna install this example in your local project please follow this simpl
 > Install Dependencies
 ``npm install``
 
-> Run Proyect in mode development
+> Run Project in mode development
 ``npm run dev``
 
 The only file that is no commited is ``.env`` file, where is all information about database. you can use this proyect from your own database from your local machine or [MongoDBAtlas](https://www.mongodb.com).
