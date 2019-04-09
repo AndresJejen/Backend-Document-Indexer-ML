@@ -14,4 +14,4 @@ const ConsultedSchema = Schema({
     timestamps: true
 });
 
-module.exports = mongoose.model('consulted',ConsultedSchema);
+module.exports = mongoose.model('consults',ConsultedSchema);

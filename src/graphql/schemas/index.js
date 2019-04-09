@@ -3,7 +3,7 @@ const { buildSchema } = require('graphql');           //COnstructor de schema Gr
 module.exports = buildSchema(`
          
 type Consulted{
-    event: Event!
+    doc: Doc!
     user: User!
     CreatedAt: String!
     UpdatedAt: String!
@@ -56,14 +56,14 @@ input InputUser{
 
 type RootQuery{
     docs: [Doc!]!
-    consulted: [Consulted!]!
+    docconsulted: [Consulted!]!
 }
 
 type RootMutation{
     createDoc(docInput: InputDoc) : Doc
     createUser(userInput: InputUser) : User
-    consult(DocId: ID!): Consulted
-    desconsult(consultedId: ID!): Doc! 
+    docconsult(DocId: ID!): Consulted
+    desdocconsult(consultedId: ID!): Doc! 
 }
 
 schema {

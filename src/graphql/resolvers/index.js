@@ -4,10 +4,25 @@ const bcrypt = require('bcryptjs');
 //Temporal Modelo
 const Doc = require('../../models/docs');
 const User = require('../../models/user');
-const User = require('../../models/docsconsultados');
+const Consult = require('../../models/docsconsultados');
 
 
 //evitar el ciclo infinito de populate el user -> createddocs -> helper -> createddocs ...
+
+const singleDoc = async docId =>{
+    try {
+        const doc = await Doc.findById(docId);
+        return {
+            ...doc._doc,
+            _id: doc.id,
+            helper: user.bind(this,doc.helper)
+        };
+    } catch (err) {
+        console.error(`Error en consultar un documento especifico ${err}`)
+        throw err;
+    }
+}
+
 const docu = async docsId => {
     try{
         const docs = await Doc.find({_id : {$in: docsId}});
@@ -21,7 +36,7 @@ const docu = async docsId => {
             })
     }
     catch (err){
-        console.error(`Error en consultar eventos de un usuario especifico ${err}`)
+        console.error(`Error en consultar documentos de un usuario especifico ${err}`)
         throw err;
     }; 
 }
@@ -58,6 +73,26 @@ module.exports = {
             console.error(`Error en consultar todos los documentos ${err}`)
             throw err;
         };
+    },
+    //Find all Documents consulted
+    docconsulted: async () =>{
+        try {
+            const consults =  await Consult.find();
+            return consults.map(consult => {
+                return{
+                    ...consult._doc,
+                    _id: consult.id,
+                    user: user.bind(this,consult._doc.user),
+                    doc: singleDoc.bind(this,consult._doc.doc),
+                    CreatedAt: new Date(consult._doc.createdAt).toISOString(),
+                    UpdatedAt: new Date(consult._doc.updatedAt).toISOString()
+                }
+            });     
+        } catch (err) {
+            console.error(`Error en documentos consultados ${err}`)
+            return {"Error": 'Error en documentos consultados ' + err};
+            throw err;
+        }
     },
     createDoc: async (args) =>{                                     // Resolver create a new Doc 
         const doc = new Doc({
@@ -124,5 +159,21 @@ module.exports = {
             console.error(`Error en guardar un nuevo usuario ${err}`)
             throw err;
         };
+   },
+   docconsult: async args =>{
+       const fetchedDoc = await Doc.findOne({_id: args.DocId});
+       const consult = new Consult({
+           user: '5caa64d94c22f22c601627b6',
+           doc: fetchedDoc
+       });
+       const result = await consult.save();
+       return {
+            ...result._doc,
+            _id: result.id,
+            user: user.bind(this,result._doc.user),
+            doc: singleDoc.bind(this,result._doc.doc),
+            CreatedAt: new Date(result._doc.createdAt).toISOString(),
+            UpdatedAt: new Date(result._doc.updatedAt).toISOString()
+       }
    }
-}
+};
