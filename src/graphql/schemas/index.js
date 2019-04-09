@@ -2,6 +2,13 @@ const { buildSchema } = require('graphql');           //COnstructor de schema Gr
 
 module.exports = buildSchema(`
          
+type Consulted{
+    event: Event!
+    user: User!
+    CreatedAt: String!
+    UpdatedAt: String!
+}
+
 type Doc{
     _id : ID!
     titulo : String!
@@ -15,6 +22,7 @@ type Doc{
     date: String!
     link: String!
     helper:  User!
+
 }
 
 type User{
@@ -48,11 +56,14 @@ input InputUser{
 
 type RootQuery{
     docs: [Doc!]!
+    consulted: [Consulted!]!
 }
 
 type RootMutation{
     createDoc(docInput: InputDoc) : Doc
     createUser(userInput: InputUser) : User
+    consult(DocId: ID!): Consulted
+    desconsult(consultedId: ID!): Doc! 
 }
 
 schema {

@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 //Temporal Modelo
 const Doc = require('../../models/docs');
 const User = require('../../models/user');
+const User = require('../../models/docsconsultados');
 
 
 //evitar el ciclo infinito de populate el user -> createddocs -> helper -> createddocs ...
