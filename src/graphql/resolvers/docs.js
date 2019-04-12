@@ -1,5 +1,6 @@
 //Modelo de documentos
 const Doc = require('../../models/docs');
+const User = require('../../models/user');
 
 //just user function
 const { transformDoc } = require('./merge');
@@ -19,7 +20,12 @@ module.exports = {
         };
     },
     // Resolver create a new Doc 
-    createDoc: async (args) =>{                                     
+    createDoc: async (args,req) =>{    
+        
+        if(!req.isAuth){
+            throw new Error('User Unauthenticated!');
+        }
+        
         const doc = new Doc({
             name: args.docInput.name,
             titulo: args.docInput.titulo,
@@ -31,11 +37,11 @@ module.exports = {
             flevel: args.docInput.flevel,
             date: new Date(),
             link: args.docInput.link,
-            helper : '5caa64d94c22f22c601627b6'
+            helper : req.userId
         });
         try{
             const result = await doc.save();
-            const helper = await User.findById('5caa64d94c22f22c601627b6');
+            const helper = await User.findById(req.userId);
             if (!helper){
                 throw new Error('Usuario inexistente.');
             }

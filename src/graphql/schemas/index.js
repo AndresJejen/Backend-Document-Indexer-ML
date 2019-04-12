@@ -34,6 +34,12 @@ type User{
     documentsadded : [Doc!]
 }
 
+type AuthData{
+    userId: ID!
+    token: String!
+    tokenExpiration: Int! 
+}
+
 input InputDoc{
     name: String!
     titulo : String!
@@ -57,13 +63,14 @@ input InputUser{
 type RootQuery{
     docs: [Doc!]!
     docconsulted: [Consulted!]!
+    login(email: String!, password: String!) : AuthData!
 }
 
 type RootMutation{
     createDoc(docInput: InputDoc) : Doc
     createUser(userInput: InputUser) : User
     docconsult(DocId: ID!): Consulted
-    desdocconsult(consultedId: ID!): Doc! 
+
 }
 
 schema {

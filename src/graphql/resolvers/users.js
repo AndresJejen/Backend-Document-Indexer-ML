@@ -1,8 +1,12 @@
 //importaciones temporales
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 //Modelos de datos
 const User = require('../../models/user');
+
+//Configuraciones
+const { JWTSECRET } = require('../../../config');                   //Importa el modulo de configuraciones globales
 
 module.exports = {
     //Resolver Create a new User
@@ -34,5 +38,23 @@ module.exports = {
             console.error(`Error en guardar un nuevo usuario ${err}`)
             throw err;
         };
+   },
+   login: async ({email,password})=>{
+        const user = await User.findOne({email: email});
+        if(!user){
+            throw new Error('User does not exist!');
+        }
+        const isEqual = await bcrypt.compare(password, user.password);
+        if(!isEqual){
+            throw new Error('Password incorrect!');
+        }
+        const token = jwt.sign({userId: user.id, email: user.email},JWTSECRET,{
+            expiresIn: '2h'
+        });
+        return {
+            userId : user.id,
+            token : token,
+            tokenExpiration : 2
+        }
    }
 };

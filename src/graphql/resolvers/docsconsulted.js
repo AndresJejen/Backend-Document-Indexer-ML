@@ -10,7 +10,13 @@ const { transformConsulted } = require('./merge');
 
 module.exports = {
     //Find all Documents consulted
-    docconsulted: async () =>{
+    
+    docconsulted: async (args, req) =>{
+        
+        if(!req.isAuth){
+            throw new Error('User Unauthenticated!');
+        }
+        
         try {
             const consults =  await Consult.find();
             return consults.map(consult => {
@@ -22,10 +28,14 @@ module.exports = {
         }
     },
    // Crear nueva consulta de un documento
-   docconsult: async args =>{
+   docconsult: async (args,req) =>{
+       
+    if(!req.isAuth){
+        throw new Error('User Unauthenticated!');
+    }
        const fetchedDoc = await Doc.findOne({_id: args.DocId});
        const consult = new Consult({
-           user: '5caa64d94c22f22c601627b6',
+           user: req.userId,
            doc: fetchedDoc
        });
        const result = await consult.save();

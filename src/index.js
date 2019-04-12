@@ -3,7 +3,9 @@ const express = require('express');                   //Importación framework e
 const bodyparser = require('body-parser');            //Parser de Json
 const graphQLHttp = require('express-graphql');       //Express + Graphql Middleware
 const mongoose = require('mongoose');                 //Libreria control de Mongo
-const config = require('../config');                   //Importa el modulo de configuraciones globales
+
+//Importa el modulo de configuraciones globales
+const config = require('../config');                   
 
 //schemas y resolvers GraphQL
 const GraphQLschemas = require('./graphql/schemas');
@@ -14,7 +16,8 @@ const app = express();
 
 // MiddleWares
 app.use(bodyparser.json());
-
+const isAuth = require('./middlewares/is_Auth');
+app.use(isAuth);
 
 //rutas
 app.use('/api',graphQLHttp({
