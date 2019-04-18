@@ -16,8 +16,20 @@ const app = express();
 
 // MiddleWares
 app.use(bodyparser.json());
+
 const isAuth = require('./middlewares/is_Auth');
 app.use(isAuth);
+
+app.use((req,res,next)=>{
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.setHeader('Access-Control-Allow-Methods','POST,GET,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers','Content-Type,Authorization');
+
+    if(req.method === 'OPTIONS' ){
+        return res.sendStatus(200);
+    }
+    next();
+});
 
 //rutas
 app.use('/api',graphQLHttp({
@@ -36,7 +48,7 @@ mongoose.connect(uri, {
   })
   .then(() => {
         //Lanzamiento del Servidor
-        app.listen(3000,()=>{
+        app.listen(config.port,()=>{
             console.log(`Servidor corriendo en puerto 3000`)
         });
         console.log('Connection to MongoDbAtlas successful OK')       
