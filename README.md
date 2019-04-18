@@ -1,4 +1,4 @@
-# GraphQL
+# Backend Document Indexer ML Hispano
 
 This Repository is a implementation slightly modified from this [GraphQL - MongoDB and Node js Tutorial](https://academind.com/learn/node-js/graphql-with-node-react-full-app/).
 
