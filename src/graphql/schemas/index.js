@@ -57,7 +57,6 @@ input InputUser{
     name : String!
     email : String!
     password: String!
-    level: String!
 }
 
 type RootQuery{

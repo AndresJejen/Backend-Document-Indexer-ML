@@ -22,8 +22,7 @@ module.exports = {
             const helper = new User({
                 name: args.userInput.name,
                 email: args.userInput.email,
-                password: hashedPassword,
-                level: args.userInput.level
+                password: hashedPassword
             });
 
             const result = await helper.save();
